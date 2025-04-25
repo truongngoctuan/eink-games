@@ -13,17 +13,11 @@ https://github.com/tailwindlabs/tailwindcss/discussions/13188
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
+  /* @apply bg-gray-400 dark:bg-gray-950; */
 
-  color: grey;
+  /* color: black; */
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
-}
-
-.custom1 {
-  /* @apply bg-black text-white; */
-  /* color: red; */
-  border: 1px solid red;
 }
