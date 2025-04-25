@@ -1,15 +1,15 @@
 import React from "react";
 import Cell from "./Cell";
-import { CELL_BORDER, CELL_DIMENSION } from "./constants";
+import { CELL_BORDER, CELL_DIMENSION, type CellState } from "./constants";
 
 type CellGroupProps = {
-  cells: number[];
+  cells: CellState[];
 };
 function CellGroup(props: CellGroupProps) {
   const { cells } = props;
   return (
     <div
-      className="bg-black"
+      className=""
       style={{
         width: CELL_DIMENSION * 3 + 2 * CELL_BORDER,
         height: CELL_DIMENSION * 3 + 2 * CELL_BORDER,
@@ -17,7 +17,7 @@ function CellGroup(props: CellGroupProps) {
     >
       <div className="flex flex-wrap" style={{ gap: 1 }}>
         {cells.map((cell) => (
-          <Cell num={cell} />
+          <Cell key={cell.Idx} state={cell} />
         ))}
       </div>
     </div>

@@ -1,13 +1,13 @@
 import React from "react";
-import { CELL_DIMENSION } from "./constants";
+import { CELL_DIMENSION, type CellState } from "./constants";
 
 type CellProps = {
-  num: number;
+  state: CellState;
 };
 
 function Cell(props: CellProps) {
-  const { num } = props;
-  const displayText = num === 0 ? "" : num;
+  const { state } = props;
+  const displayText = state.Num === 0 ? "" : state.Num;
   return (
     <div
       className="bg-white flex flex-col justify-center items-center"
