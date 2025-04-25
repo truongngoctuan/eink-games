@@ -1,26 +1,14 @@
 import React, { useState } from "react";
-import Cell from "./Cell";
+import { type CellState } from "./Cell";
 import {
   CELL_BORDER,
   CELL_DIMENSION,
   GROUP_BORDER,
-  type CellState,
+  type Coordinate,
+  type SudokuGameState,
 } from "./constants";
 import CellGroup from "./CellGroup";
-
-type SudokuGameState = {
-  puzzle: number[];
-  selectingIdx?: number;
-  solution: number[];
-};
-
-type Coordinate = {
-  iRow: number;
-  iCol: number;
-  iGroupRow: number;
-  iGroupCol: number;
-  groupIdx: number;
-};
+import { GAME_DATA } from "~/data/sudoku";
 
 function getCoordinate(idx: number, size: number) {
   const iRow = Math.floor(idx / (size * 3));
@@ -54,9 +42,21 @@ function getGroups(gameState: SudokuGameState) {
     const coordinate = getCoordinate(i, size);
     // console.log("groupIdx", groupIdx, iGroupRow, iGroupCol, iRow, iCol);
 
+    const isSelected = gameState.selectingIdx === i;
+    const coordinateSelected = getCoordinate(gameState.selectingIdx, size);
+
     groups[coordinate.groupIdx].push({
       Idx: i,
       Num: gameState.puzzle[i],
+      isUserInput: gameState.puzzle[i] === 0,
+      selected: isSelected,
+      isHightlighted:
+        coordinateSelected.iCol === coordinate.iCol ||
+        coordinateSelected.iRow === coordinate.iRow ||
+        coordinateSelected.groupIdx === coordinate.groupIdx,
+      isSameNum:
+        gameState.puzzle[gameState.selectingIdx] !== 0 &&
+        gameState.puzzle[i] === gameState.puzzle[gameState.selectingIdx],
     });
   }
   return groups;
@@ -65,15 +65,17 @@ function getGroups(gameState: SudokuGameState) {
 function SudokuBoard() {
   const boardDimension = CELL_DIMENSION * 9;
   const borderDimension = 4 * GROUP_BORDER + 3 * 2 * CELL_BORDER;
-  const [gameState, setGameState] = useState<SudokuGameState>({
-    puzzle: [
-      6, 3, 5, 0, 1, 0, 4, 0, 2, 9, 0, 1, 0, 3, 0, 0, 7, 5, 0, 0, 0, 4, 9, 5, 0,
-      0, 6, 1, 0, 0, 6, 4, 0, 0, 0, 0, 0, 6, 7, 8, 0, 0, 0, 1, 3, 3, 0, 9, 0, 0,
-      0, 6, 2, 0, 0, 9, 0, 0, 0, 4, 2, 5, 0, 0, 0, 4, 0, 5, 7, 9, 0, 0, 0, 1, 6,
-      0, 0, 2, 0, 0, 0,
-    ],
+
+  const [selectingIdx, setSelectingIdx] = useState<number>(-1);
+  const gameState: SudokuGameState = {
+    puzzle: GAME_DATA.easy.puzzle_data.puzzle,
+    selectingIdx,
     solution: [],
-  });
+  };
+
+  const handleSelect = (idx: number) => {
+    setSelectingIdx(idx);
+  };
 
   const groups = getGroups(gameState);
   return (
@@ -85,7 +87,7 @@ function SudokuBoard() {
       }}
     >
       {groups.map((group, groupIdx) => (
-        <CellGroup key={groupIdx} cells={group} />
+        <CellGroup key={groupIdx} cells={group} onSelect={handleSelect} />
       ))}
     </div>
   );

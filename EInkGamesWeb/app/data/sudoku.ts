@@ -1,4 +1,4 @@
-var gameData = {
+export const GAME_DATA = {
   "displayDate": "April 24, 2025",
   "easy": {
       "day_of_week": "Thursday",
