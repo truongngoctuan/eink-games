@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "eink-games",
   "private": true,
   "type": "module",
   "scripts": {
@@ -24,12 +24,15 @@
     "@types/node": "^20",
     "@types/react": "^19.0.1",
     "@types/react-dom": "^19.0.1",
+    "@vitejs/plugin-legacy": "^5.4.3",
+    "@vitejs/plugin-react-swc": "^3.9.0",
     "postcss": "^8.5.3",
     "postcss-custom-properties": "^14.0.4",
     "react-router-devtools": "^1.1.0",
     "tailwindcss": "^4.1.4",
+    "terser": "^5.39.0",
     "typescript": "^5.7.2",
-    "vite": "^5.4.11",
+    "vite": "^5.4.18",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }
