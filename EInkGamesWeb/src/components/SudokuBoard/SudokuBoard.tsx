@@ -8,7 +8,7 @@ import {
   type SudokuGameState,
 } from "./constants";
 import CellGroup from "./CellGroup";
-import { GAME_DATA } from "~/data/sudoku";
+import { GAME_DATA } from "@/data/sudoku";
 
 function getCoordinate(idx: number, size: number) {
   const iRow = Math.floor(idx / (size * 3));
