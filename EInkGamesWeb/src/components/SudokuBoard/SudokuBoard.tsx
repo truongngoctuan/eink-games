@@ -29,8 +29,8 @@ function SudokuBoard() {
 
   const KEY_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
-    <div className="flex flex-wrap">
-      <div className="sm:w-full md:w-2/3 bg-amber-300">
+    <div className="flex flex-col items-center md:flex-row md:items-start md:justify-center">
+      <div className="w-full md:w-fit flex justify-center md:justify-end">
         <div
           className="bg-black flex flex-wrap p-1"
           style={{
@@ -48,10 +48,10 @@ function SudokuBoard() {
           ))}
         </div>
       </div>
-      <div className="bg-orange-400 sm:w-2/3 md:w-1/3 mt-2 flex flex-col items-stretch px-2">
-        <div className="my-2 flex flex-row justify-between">
+      <div className="w-4/5 md:w-1/3 xl:w-1/4 flex flex-col items-stretch px-2 mt-4 md:mt-0">
+        <div className="mb-2 flex flex-row justify-between">
           <div>
-            <Button variant="secondary" className="mr-2">
+            <Button variant="secondary" className="">
               Normal
             </Button>
             <Button variant="secondary">Candidate</Button>
@@ -62,13 +62,18 @@ function SudokuBoard() {
           {KEY_VALUES.map((v) => (
             <Button
               variant="secondary"
-              className="sudoku__input_button mb-1"
+              size="lg"
+              className="sudoku__input_button mb-2"
               key={v}
             >
               {v}
             </Button>
           ))}
-          <Button variant="secondary" className="sudoku__input_button">
+          <Button
+            variant="secondary"
+            size="lg"
+            className="sudoku__input_button"
+          >
             X
           </Button>
         </div>

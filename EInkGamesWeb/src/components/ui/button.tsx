@@ -54,6 +54,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           internalVariant === "secondary" &&
             "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
           internalSize === "default" && "h-9 px-4 py-2",
+          internalSize === "sm" && "h-8 rounded-md px-3 text-xs",
+          internalSize === "lg" && "h-10 rounded-md px-8",
+          internalSize === "icon" && "h-9 w-9",
           className
         )}
         ref={ref}

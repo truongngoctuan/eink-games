@@ -1,3 +1,11 @@
-.sudoku__input_button {
-  width: calc(20% - 4px);
+@media screen and (min-width: 48rem) {
+  .sudoku__input_button {
+    width: calc(33.33% - 4px);
+  } 
+}
+
+@media screen and (max-width: 48rem) {
+  .sudoku__input_button {
+    width: calc(20% - 4px);
+  }  
 }
