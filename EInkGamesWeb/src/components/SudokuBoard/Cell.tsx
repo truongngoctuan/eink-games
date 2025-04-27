@@ -36,11 +36,14 @@ function Cell(props: CellProps) {
       className={clsx(
         "flex flex-col justify-center items-center cell",
         {
-          "bg-white":
+          "bg-gray-200":
             !state.isUserInput &&
             !state.selected &&
             !state.isHightlighted &&
             !state.isSameNum,
+        },
+        {
+          underline: !state.isUserInput,
         },
         {
           "bg-white":
@@ -69,7 +72,7 @@ function Cell(props: CellProps) {
       onTouchEnd={(e) => onSelect(state.idx)}
       onTouchStart={(e) => onSelect(state.idx)}
     >
-      <span className="font-bold font-san text-3xl">{displayText}</span>
+      <span className="font-semibold font-san text-3xl">{displayText}</span>
     </div>
   );
 }

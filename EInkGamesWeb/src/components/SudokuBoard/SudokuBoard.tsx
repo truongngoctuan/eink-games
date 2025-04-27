@@ -48,7 +48,7 @@ function SudokuBoard() {
           ))}
         </div>
       </div>
-      <div className="w-4/5 md:w-1/3 xl:w-1/4 flex flex-col items-stretch px-2 mt-4 md:mt-0">
+      <div className="w-4/5 md:w-1/3 lg:w-1/4 flex flex-col items-stretch px-2 mt-4 md:mt-0">
         <div className="mb-2 flex flex-row justify-between">
           <div>
             <Button variant="secondary" className="">

@@ -1,4 +1,4 @@
-export const CELL_DIMENSION = 42;
+export const CELL_DIMENSION = 48;
 export const GROUP_BORDER = 4;
 export const CELL_BORDER = 1;
 
