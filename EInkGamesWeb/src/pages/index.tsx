@@ -17,7 +17,7 @@ const geistMono = localFont({
 export default function Home() {
   return (
     <div className="flex flex-col border-2 border-white">
-      <h1 className="p-6 pb-12 font-extrabold font-serif text-4xl">
+      <h1 className="p-3 pb-4 font-extrabold font-serif text-2xl">
         Sudoku Game for Kindle
       </h1>
       <div className="flex flex-col items-center">

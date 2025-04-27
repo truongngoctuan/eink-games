@@ -1,10 +1,11 @@
 import React from "react";
-import { CELL_DIMENSION } from "./constants";
+import { CELL_BORDER, CELL_DIMENSION, Coordinate } from "./constants";
 import classNames from "classnames";
 
 export type CellState = {
-  Idx: number;
-  Num: number;
+  idx: number;
+  num: number;
+  coordinate: Coordinate;
   selected: boolean;
   isUserInput: boolean;
   isHightlighted: boolean;
@@ -18,7 +19,18 @@ type CellProps = {
 
 function Cell(props: CellProps) {
   const { state, onSelect } = props;
-  const displayText = state.Num === 0 ? "" : state.Num;
+  const displayText = state.num === 0 ? "" : state.num;
+
+  let marginRight = CELL_BORDER;
+  if ((state.coordinate.iCol + 1) % 3 === 0) {
+    marginRight = 0;
+  }
+
+  let marginBottom = CELL_BORDER;
+  if ((state.coordinate.iRow + 1) % 3 === 0) {
+    marginBottom = 0;
+  }
+
   return (
     <div
       className={classNames(
@@ -38,19 +50,24 @@ function Cell(props: CellProps) {
             !state.isSameNum,
         },
         {
-          "bg-amber-400": state.selected,
+          "bg-amber-600": state.selected,
         },
         {
-          "bg-amber-100": state.isHightlighted,
+          "bg-amber-300": state.isHightlighted,
         },
         {
-          "bg-amber-200": state.isSameNum,
+          "bg-amber-400": state.isSameNum,
         }
       )}
-      style={{ width: CELL_DIMENSION, height: CELL_DIMENSION }}
-      onClick={(e) => onSelect(state.Idx)}
-      onTouchEnd={(e) => onSelect(state.Idx)}
-      onTouchStart={(e) => onSelect(state.Idx)}
+      style={{
+        width: CELL_DIMENSION,
+        height: CELL_DIMENSION,
+        marginRight,
+        marginBottom,
+      }}
+      onClick={(e) => onSelect(state.idx)}
+      onTouchEnd={(e) => onSelect(state.idx)}
+      onTouchStart={(e) => onSelect(state.idx)}
     >
       <span className="font-bold font-san text-4xl">{displayText}</span>
     </div>

@@ -46,8 +46,9 @@ function getGroups(gameState: SudokuGameState) {
     const coordinateSelected = getCoordinate(gameState.selectingIdx, size);
 
     groups[coordinate.groupIdx].push({
-      Idx: i,
-      Num: gameState.puzzle[i],
+      idx: i,
+      num: gameState.puzzle[i],
+      coordinate,
       isUserInput: gameState.puzzle[i] === 0,
       selected: isSelected,
       isHightlighted:
@@ -80,14 +81,19 @@ function SudokuBoard() {
   const groups = getGroups(gameState);
   return (
     <div
-      className="bg-black flex flex-wrap gap-1 p-1"
+      className="bg-black flex flex-wrap p-1"
       style={{
         width: boardDimension + borderDimension,
         height: boardDimension + borderDimension,
       }}
     >
       {groups.map((group, groupIdx) => (
-        <CellGroup key={groupIdx} cells={group} onSelect={handleSelect} />
+        <CellGroup
+          key={groupIdx}
+          cells={group}
+          state={group[0].coordinate}
+          onSelect={handleSelect}
+        />
       ))}
     </div>
   );

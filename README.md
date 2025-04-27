@@ -33,3 +33,7 @@ Vite without swc does not work as well.
 ### Conclusion
 
 Vite with SWC (used the similar version that works for NextJs) is the best option and simple to use, compared to NextJs.
+
+## CSS hack
+
+Don't use Flex gap, use margin instead.
