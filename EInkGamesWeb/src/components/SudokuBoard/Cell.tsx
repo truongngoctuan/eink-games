@@ -69,7 +69,7 @@ function Cell(props: CellProps) {
       onTouchEnd={(e) => onSelect(state.idx)}
       onTouchStart={(e) => onSelect(state.idx)}
     >
-      <span className="font-bold font-san text-4xl">{displayText}</span>
+      <span className="font-bold font-san text-3xl">{displayText}</span>
     </div>
   );
 }

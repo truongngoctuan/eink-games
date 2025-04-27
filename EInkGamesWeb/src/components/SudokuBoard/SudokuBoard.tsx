@@ -1,66 +1,23 @@
 import React, { useState } from "react";
-import { type CellState } from "./Cell";
 import {
   CELL_BORDER,
   CELL_DIMENSION,
   GROUP_BORDER,
-  type Coordinate,
   type SudokuGameState,
 } from "./constants";
 import CellGroup from "./CellGroup";
 import { GAME_DATA } from "@/data/sudoku";
+import { getGroups } from "./service";
 
-function getCoordinate(idx: number, size: number) {
-  const iRow = Math.floor(idx / (size * 3));
-  const iCol = idx % (size * 3);
+type InputKeyButtonProps = {
+  value: string;
+};
 
-  const iGroupRow = Math.floor(iRow / size);
-  const iGroupCol = Math.floor(iCol / size);
-  const groupIdx = iGroupRow * size + iGroupCol;
-
-  var coor: Coordinate = {
-    iRow,
-    iCol,
-    iGroupCol,
-    iGroupRow,
-    groupIdx,
-  };
-
-  return coor;
-}
-
-function getGroups(gameState: SudokuGameState) {
-  const size = 3;
-
-  const groups: Array<CellState[]> = [];
-  for (let i = 0; i < size * 3; i++) {
-    groups.push([]);
-  }
-
-  for (let i = 0; i < gameState.puzzle.length; i++) {
-    // result.push(gameState.puzzle.slice(i, i + size));
-    const coordinate = getCoordinate(i, size);
-    // console.log("groupIdx", groupIdx, iGroupRow, iGroupCol, iRow, iCol);
-
-    const isSelected = gameState.selectingIdx === i;
-    const coordinateSelected = getCoordinate(gameState.selectingIdx, size);
-
-    groups[coordinate.groupIdx].push({
-      idx: i,
-      num: gameState.puzzle[i],
-      coordinate,
-      isUserInput: gameState.puzzle[i] === 0,
-      selected: isSelected,
-      isHightlighted:
-        coordinateSelected.iCol === coordinate.iCol ||
-        coordinateSelected.iRow === coordinate.iRow ||
-        coordinateSelected.groupIdx === coordinate.groupIdx,
-      isSameNum:
-        gameState.puzzle[gameState.selectingIdx] !== 0 &&
-        gameState.puzzle[i] === gameState.puzzle[gameState.selectingIdx],
-    });
-  }
-  return groups;
+function InputKeyButton(props: InputKeyButtonProps) {
+  const { value } = props;
+  return (
+    <button className="p-2 px-4 border-gray-500 border-2 w-1/5">{value}</button>
+  );
 }
 
 function SudokuBoard() {
@@ -69,7 +26,7 @@ function SudokuBoard() {
 
   const [selectingIdx, setSelectingIdx] = useState<number>(-1);
   const gameState: SudokuGameState = {
-    puzzle: GAME_DATA.easy.puzzle_data.puzzle,
+    puzzle: GAME_DATA[0].easy.puzzle_data.puzzle,
     selectingIdx,
     solution: [],
   };
@@ -79,23 +36,44 @@ function SudokuBoard() {
   };
 
   const groups = getGroups(gameState);
+
+  const KEY_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
-    <div
-      className="bg-black flex flex-wrap p-1"
-      style={{
-        width: boardDimension + borderDimension,
-        height: boardDimension + borderDimension,
-      }}
-    >
-      {groups.map((group, groupIdx) => (
-        <CellGroup
-          key={groupIdx}
-          cells={group}
-          state={group[0].coordinate}
-          onSelect={handleSelect}
-        />
-      ))}
-    </div>
+    <>
+      <div
+        className="bg-black flex flex-wrap p-1"
+        style={{
+          width: boardDimension + borderDimension,
+          height: boardDimension + borderDimension,
+        }}
+      >
+        {groups.map((group, groupIdx) => (
+          <CellGroup
+            key={groupIdx}
+            cells={group}
+            state={group[0].coordinate}
+            onSelect={handleSelect}
+          />
+        ))}
+      </div>
+      <div className="button-groups bg-orange-400 w-full h-40 mt-2">
+        <div className="w-1/2 bg-green-500">
+          <div>
+            <button className="p-2 px-4 border-gray-500 border-2">
+              Normal
+            </button>
+            <button>Candidate</button>
+          </div>
+          <button>Undo</button>
+        </div>
+        <div className="w-1/2 bg-blue-500 flex flex-row flex-wrap">
+          {KEY_VALUES.map((v) => (
+            <InputKeyButton key={v} value={v.toString()}></InputKeyButton>
+          ))}
+          <InputKeyButton value={"X"}></InputKeyButton>
+        </div>
+      </div>
+    </>
   );
 }
 
