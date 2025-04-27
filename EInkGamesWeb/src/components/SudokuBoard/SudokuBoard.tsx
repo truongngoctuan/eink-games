@@ -8,17 +8,7 @@ import {
 import CellGroup from "./CellGroup";
 import { GAME_DATA } from "@/data/sudoku";
 import { getGroups } from "./service";
-
-type InputKeyButtonProps = {
-  value: string;
-};
-
-function InputKeyButton(props: InputKeyButtonProps) {
-  const { value } = props;
-  return (
-    <button className="p-2 px-4 border-gray-500 border-2 w-1/5">{value}</button>
-  );
-}
+import { Button } from "../ui/button";
 
 function SudokuBoard() {
   const boardDimension = CELL_DIMENSION * 9;
@@ -39,41 +29,51 @@ function SudokuBoard() {
 
   const KEY_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
-    <>
-      <div
-        className="bg-black flex flex-wrap p-1"
-        style={{
-          width: boardDimension + borderDimension,
-          height: boardDimension + borderDimension,
-        }}
-      >
-        {groups.map((group, groupIdx) => (
-          <CellGroup
-            key={groupIdx}
-            cells={group}
-            state={group[0].coordinate}
-            onSelect={handleSelect}
-          />
-        ))}
-      </div>
-      <div className="button-groups bg-orange-400 w-full h-40 mt-2">
-        <div className="w-1/2 bg-green-500">
-          <div>
-            <button className="p-2 px-4 border-gray-500 border-2">
-              Normal
-            </button>
-            <button>Candidate</button>
-          </div>
-          <button>Undo</button>
-        </div>
-        <div className="w-1/2 bg-blue-500 flex flex-row flex-wrap">
-          {KEY_VALUES.map((v) => (
-            <InputKeyButton key={v} value={v.toString()}></InputKeyButton>
+    <div className="flex flex-wrap">
+      <div className="sm:w-full md:w-2/3 bg-amber-300">
+        <div
+          className="bg-black flex flex-wrap p-1"
+          style={{
+            width: boardDimension + borderDimension,
+            height: boardDimension + borderDimension,
+          }}
+        >
+          {groups.map((group, groupIdx) => (
+            <CellGroup
+              key={groupIdx}
+              cells={group}
+              state={group[0].coordinate}
+              onSelect={handleSelect}
+            />
           ))}
-          <InputKeyButton value={"X"}></InputKeyButton>
         </div>
       </div>
-    </>
+      <div className="bg-orange-400 sm:w-2/3 md:w-1/3 mt-2 flex flex-col items-stretch px-2">
+        <div className="my-2 flex flex-row justify-between">
+          <div>
+            <Button variant="secondary" className="mr-2">
+              Normal
+            </Button>
+            <Button variant="secondary">Candidate</Button>
+          </div>
+          <Button variant="secondary">Undo</Button>
+        </div>
+        <div className="flex flex-row flex-wrap justify-between">
+          {KEY_VALUES.map((v) => (
+            <Button
+              variant="secondary"
+              className="sudoku__input_button mb-1"
+              key={v}
+            >
+              {v}
+            </Button>
+          ))}
+          <Button variant="secondary" className="sudoku__input_button">
+            X
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }
 

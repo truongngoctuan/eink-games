@@ -20,9 +20,7 @@ export default function Home() {
       <h1 className="p-3 pb-4 font-extrabold font-serif text-2xl">
         Sudoku Game for Kindle
       </h1>
-      <div className="flex flex-col items-center">
-        <SudokuBoard />
-      </div>
+      <SudokuBoard />
     </div>
   );
 }

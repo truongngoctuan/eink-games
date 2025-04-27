@@ -1,6 +1,6 @@
 import React from "react";
 import { CELL_BORDER, CELL_DIMENSION, Coordinate } from "./constants";
-import classNames from "classnames";
+import clsx from "clsx";
 
 export type CellState = {
   idx: number;
@@ -33,7 +33,7 @@ function Cell(props: CellProps) {
 
   return (
     <div
-      className={classNames(
+      className={clsx(
         "flex flex-col justify-center items-center cell",
         {
           "bg-white":
