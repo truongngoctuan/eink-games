@@ -9,15 +9,16 @@ import {
 } from "./constants";
 import CellGroup from "./CellGroup";
 import { GAME_DATA } from "@/data/sudoku";
-import { getCurrentSolution, getGroups, validateSolution } from "./service";
+import { getCurrentSolution, processGame, validateSolution } from "./service";
 import { Button } from "../ui/button";
+import DebugScreen from "../DebugScreen";
 
 function SudokuBoard() {
   const boardDimension = CELL_DIMENSION * 9;
   const borderDimension = 4 * GROUP_BORDER + 3 * 2 * CELL_BORDER;
 
   const [userInputs, setUserInputs] = useState<SudokuUserInput[]>([]);
-  console.log(userInputs);
+  // console.log(userInputs);
   const [selectingIdx, setSelectingIdx] = useState<number>(-1);
   const puzzleData = GAME_DATA[0].easy.puzzle_data;
 
@@ -48,11 +49,13 @@ function SudokuBoard() {
     ]);
   };
 
-  const groups = getGroups(gameState);
+  const groups = processGame(gameState);
+  // console.log(groups[0]);
 
   const KEY_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
     <div className="flex flex-col items-center md:flex-row md:items-start md:justify-center">
+      <DebugScreen data="asdf" />
       <div className="w-full md:w-fit flex justify-center md:justify-end">
         <div
           className="bg-black flex flex-wrap p-1"

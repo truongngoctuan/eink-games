@@ -10,6 +10,7 @@ export type CellState = {
   isUserInput: boolean;
   isHightlighted: boolean;
   isSameNum: boolean;
+  hasConflict: boolean;
 };
 
 type CellProps = {
@@ -34,7 +35,7 @@ function Cell(props: CellProps) {
   return (
     <div
       className={clsx(
-        "flex flex-col justify-center items-center cell",
+        "flex flex-col justify-center items-center cell relative",
         {
           "bg-gray-200":
             !state.isUserInput &&
@@ -73,6 +74,14 @@ function Cell(props: CellProps) {
       onTouchStart={(e) => onSelect(state.idx)}
     >
       <span className="font-semibold font-san text-3xl">{displayText}</span>
+      <div
+        className={clsx(
+          "absolute bottom-1 right-1 bg-red-400 rounded-full w-2 h-2",
+          {
+            hidden: !state.hasConflict,
+          }
+        )}
+      ></div>
     </div>
   );
 }
