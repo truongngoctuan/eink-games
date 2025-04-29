@@ -15,3 +15,5 @@ export type Coordinate = {
   iGroupCol: number;
   groupIdx: number;
 };
+
+export const DIFFICULTY_LEVELS = ["easy", "medium", "hard"];
