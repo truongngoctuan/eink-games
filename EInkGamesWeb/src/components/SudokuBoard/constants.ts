@@ -29,6 +29,11 @@ export type Coordinate = {
   groupIdx: number;
 };
 
+export type XYCoordinate = {
+  X: number;
+  Y: number;
+}
+
 export type SudokuUserInput = {
   Idx: number;
   Value: number;
