@@ -2,27 +2,50 @@ import React, { useState } from "react";
 import {
   CELL_BORDER,
   CELL_DIMENSION,
+  GameState as ActivityState,
   GROUP_BORDER,
   type SudokuGameState,
+  SudokuUserInput,
 } from "./constants";
 import CellGroup from "./CellGroup";
 import { GAME_DATA } from "@/data/sudoku";
-import { getGroups } from "./service";
+import { getCurrentSolution, getGroups, validateSolution } from "./service";
 import { Button } from "../ui/button";
 
 function SudokuBoard() {
   const boardDimension = CELL_DIMENSION * 9;
   const borderDimension = 4 * GROUP_BORDER + 3 * 2 * CELL_BORDER;
 
+  const [userInputs, setUserInputs] = useState<SudokuUserInput[]>([]);
+  console.log(userInputs);
   const [selectingIdx, setSelectingIdx] = useState<number>(-1);
+  const puzzleData = GAME_DATA[0].easy.puzzle_data;
+
+  const currentSolution = getCurrentSolution(puzzleData.puzzle, userInputs);
+  let activityState =
+    userInputs.length > 0 ? ActivityState.InProgress : ActivityState.Started;
+  if (validateSolution(currentSolution, puzzleData.solution)) {
+    activityState = ActivityState.Completed;
+  }
   const gameState: SudokuGameState = {
-    puzzle: GAME_DATA[0].easy.puzzle_data.puzzle,
+    puzzle: puzzleData.puzzle,
     selectingIdx,
-    solution: [],
+    activityState,
+    userInputs,
   };
 
   const handleSelect = (idx: number) => {
     setSelectingIdx(idx);
+  };
+
+  const handleUserInput = (userInputValue: number) => {
+    setUserInputs([
+      ...userInputs,
+      {
+        Idx: selectingIdx,
+        Value: userInputValue,
+      },
+    ]);
   };
 
   const groups = getGroups(gameState);
@@ -65,6 +88,7 @@ function SudokuBoard() {
               size="lg"
               className="sudoku__input_button mb-2"
               key={v}
+              onClick={(e) => handleUserInput(v)}
             >
               {v}
             </Button>

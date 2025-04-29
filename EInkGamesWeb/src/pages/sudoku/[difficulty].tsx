@@ -30,7 +30,6 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 export const getStaticProps = (async (context) => {
-  console.log(context);
   return { props: { difficulty: context?.params?.difficulty as string } };
 }) satisfies GetStaticProps<SudokuWithLevelDifficultyPageProps>;
 

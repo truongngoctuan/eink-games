@@ -9,3 +9,12 @@
     width: calc(20% - 4px);
   }  
 }
+
+.sudoku__input_button {
+  background-color: #e5e5f7;
+  border: 2px solid lightgray;
+}
+
+.sudoku__input_button .disabled {
+  background: repeating-linear-gradient( -45deg, lightgray, lightgray 5px, white 5px, white 25px );
+}

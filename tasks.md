@@ -11,3 +11,4 @@ todos
 * [ ] Publish the game to github pages
 * [ ] Anonymous user tracking
 * [ ] API to get the game data
+* [ ] add game tick tac toe https://github.com/mrsac7/tictactoe

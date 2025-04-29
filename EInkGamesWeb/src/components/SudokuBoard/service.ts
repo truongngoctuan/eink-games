@@ -1,5 +1,5 @@
 import { CellState } from "./Cell";
-import { Coordinate, SudokuGameState } from "./constants";
+import { Coordinate, SudokuGameState, SudokuUserInput } from "./constants";
 
 
 export function getCoordinate(idx: number, size: number) {
@@ -29,6 +29,8 @@ export function getGroups(gameState: SudokuGameState) {
     groups.push([]);
   }
 
+  const currentSolution = getCurrentSolution(gameState.puzzle, gameState.userInputs);
+
   for (let i = 0; i < gameState.puzzle.length; i++) {
     // result.push(gameState.puzzle.slice(i, i + size));
     const coordinate = getCoordinate(i, size);
@@ -39,7 +41,7 @@ export function getGroups(gameState: SudokuGameState) {
 
     groups[coordinate.groupIdx].push({
       idx: i,
-      num: gameState.puzzle[i],
+      num: currentSolution[i],
       coordinate,
       isUserInput: gameState.puzzle[i] === 0,
       selected: isSelected,
@@ -53,4 +55,21 @@ export function getGroups(gameState: SudokuGameState) {
     });
   }
   return groups;
+}
+
+export function getCurrentSolution(puzzle: number[], userInputs: SudokuUserInput[]) {
+  var solution = [...puzzle];
+
+  userInputs.forEach((userInput) => {
+    solution[userInput.Idx] = userInput.Value;
+  });
+
+  return solution;
+}
+
+export function validateSolution(currentSolution: number[], solution: number[]) {
+  solution.forEach((item, idx) => {
+    if (currentSolution[idx] !== item) return false;
+  });
+  return true;
 }
