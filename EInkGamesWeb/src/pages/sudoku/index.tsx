@@ -24,7 +24,7 @@ export function DifficultyBtn({ difficulty }: DifficultyBtnProps) {
 export default function SudokuPage() {
   return (
     <div className="flex flex-col border-2 border-white">
-      <h1 className="font-extrabold font-serif text-3xl">Built for Kindle</h1>
+      <h1 className="font-extrabold font-serif text-xl">Built for Kindle</h1>
 
       <div className="flex flex-col items-center">
         <Image
