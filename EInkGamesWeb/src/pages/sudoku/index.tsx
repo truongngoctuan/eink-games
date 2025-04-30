@@ -1,4 +1,5 @@
 import { DIFFICULTY_LEVELS } from "@/components/SudokuBoard/constants";
+import { getImagePath } from "@/components/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -23,23 +24,19 @@ export function DifficultyBtn({ difficulty }: DifficultyBtnProps) {
 
 export default function SudokuPage() {
   return (
-    <div className="flex flex-col border-2 border-white">
-      <h1 className="font-extrabold font-serif text-xl">Built for Kindle</h1>
-
-      <div className="flex flex-col items-center">
-        <Image
-          className="mr-2"
-          width={128}
-          height={128}
-          src="/game-icons/sudoku.svg"
-          alt="Sudoku icon"
-        />
-        <h2 className="font-extrabold font-serif text-2xl mb-8">Sudoku Game</h2>
-        <p className="mb-4 font-semibold">Select game level:</p>
-        {DIFFICULTY_LEVELS.map((d) => (
-          <DifficultyBtn key={d} difficulty={d} />
-        ))}
-      </div>
+    <div className="flex flex-col items-center">
+      <Image
+        className="mr-2"
+        width={128}
+        height={128}
+        src={getImagePath("/game-icons/sudoku.svg")}
+        alt="Sudoku icon"
+      />
+      <h2 className="font-extrabold font-serif text-2xl mb-8">Sudoku Game</h2>
+      <p className="mb-4 font-semibold">Select game level:</p>
+      {DIFFICULTY_LEVELS.map((d) => (
+        <DifficultyBtn key={d} difficulty={d} />
+      ))}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import SudokuBoard from "@/components/SudokuBoard";
+import { getImagePath } from "@/components/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
 
@@ -25,7 +26,7 @@ export const getStaticPaths = (async () => {
         },
       },
     ],
-    fallback: true, // false or "blocking"
+    fallback: false, // false or "blocking"
   };
 }) satisfies GetStaticPaths;
 
@@ -37,21 +38,19 @@ export default function SudokuWithLevelDifficultyPage({
   difficulty,
 }: SudokuWithLevelDifficultyPageProps) {
   return (
-    <div className="flex flex-col border-2 border-white">
-      <h1 className="font-extrabold font-serif text-xl">Built for Kindle</h1>
-
+    <>
       <div className="bg-gray-200 my-2 p-2 flex">
         <Image
           className="mr-2"
           width={28}
           height={28}
-          src="/game-icons/sudoku.svg"
+          src={getImagePath("/game-icons/sudoku.svg")}
           alt="Sudoku icon"
         />
         <b>Sudoku Game </b> - <i>{difficulty}</i> - Game Time: 00:00:00 -
         Started
       </div>
       <SudokuBoard />
-    </div>
+    </>
   );
 }

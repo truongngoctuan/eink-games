@@ -12,15 +12,13 @@ function getCoordinate(idx: number) {
   const iGroupCol = Math.floor(iCol / GROUP_SIZE);
   const groupIdx = iGroupRow * GROUP_SIZE + iGroupCol;
 
-  var coor: Coordinate = {
+  return {
     iRow,
     iCol,
     iGroupCol,
     iGroupRow,
     groupIdx,
-  };
-
-  return coor;
+  } satisfies Coordinate;
 }
 
 function getXYCoordinate(idx: number): XYCoordinate {
@@ -33,15 +31,15 @@ function getXYCoordinate(idx: number): XYCoordinate {
   };
 }
 
-// each position should only input exactly once
-function processUserInputs(historicalUserInputs: SudokuUserInput[]) {
-  let userInputsDict = new Map<number, number>();
-  historicalUserInputs.forEach(userInput => {
-    userInputsDict.set(userInput.Idx, userInput.Value);
-  });
+// // each position should only input exactly once
+// function processUserInputs(historicalUserInputs: SudokuUserInput[]) {
+//   let userInputsDict = new Map<number, number>();
+//   historicalUserInputs.forEach(userInput => {
+//     userInputsDict.set(userInput.Idx, userInput.Value);
+//   });
 
-  return userInputsDict;
-}
+//   return userInputsDict;
+// }
 
 type getSameConditionIdxFn = (currentIdx: number, idx: number) => XYCoordinate;
 
@@ -142,7 +140,7 @@ export function getGroups(puzzle: number[], selectingIdx: number, gameState: Sud
     const coordinateSelected = getCoordinate(selectingIdx);
     const isUserInput = puzzle[i] === 0;
 
-    let hasConflict = matrixItem.HasError;
+    const hasConflict = matrixItem.HasError;
 
     groups[coordinate.groupIdx].push({
       idx: i,
@@ -164,7 +162,7 @@ export function getGroups(puzzle: number[], selectingIdx: number, gameState: Sud
 }
 
 export function getCurrentSolution(puzzle: number[], userInputs: SudokuUserInput[]) {
-  var solution = [...puzzle];
+  const solution = [...puzzle];
 
   userInputs.forEach((userInput) => {
     solution[userInput.Idx] = userInput.Value;
@@ -177,7 +175,7 @@ export function getCurrentSolution(puzzle: number[], userInputs: SudokuUserInput
 export function getCurrentSolutionMatrix(puzzle: number[], userInputs: SudokuUserInput[]): MatrixItem[][] {
   const currentSolution = getCurrentSolution(puzzle, userInputs);
 
-  let arr = [];
+  const arr = [];
   for (let i = 0; i < BOARD_SIZE; i++) {
     arr.push(
       currentSolution

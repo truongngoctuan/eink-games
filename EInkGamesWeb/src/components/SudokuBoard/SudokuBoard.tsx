@@ -89,7 +89,7 @@ function SudokuBoard() {
               size="lg"
               className="sudoku__input_button mb-2"
               key={v}
-              onClick={(e) => handleUserInput(v)}
+              onClick={() => handleUserInput(v)}
             >
               {v}
             </Button>

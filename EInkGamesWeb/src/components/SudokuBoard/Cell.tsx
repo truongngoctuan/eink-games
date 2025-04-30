@@ -69,9 +69,9 @@ function Cell(props: CellProps) {
         marginRight,
         marginBottom,
       }}
-      onClick={(e) => onSelect(state.idx)}
-      onTouchEnd={(e) => onSelect(state.idx)}
-      onTouchStart={(e) => onSelect(state.idx)}
+      onClick={() => onSelect(state.idx)}
+      onTouchEnd={() => onSelect(state.idx)}
+      onTouchStart={() => onSelect(state.idx)}
     >
       <span className="font-semibold font-san text-3xl">{displayText}</span>
       <div
