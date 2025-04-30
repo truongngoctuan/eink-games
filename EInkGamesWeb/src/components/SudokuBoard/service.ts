@@ -1,5 +1,5 @@
 import { CellState } from "./Cell";
-import { Coordinate, SudokuGameState, SudokuUserInput, XYCoordinate } from "./constants";
+import { Coordinate, MatrixItem, SudokuGameState, SudokuUserInput, XYCoordinate } from "./constants";
 
 const BOARD_SIZE = 9;
 const GROUP_SIZE = 3;
@@ -81,17 +81,17 @@ const getSameGroupIdxHandler = (currentI: number, idx: number) => {
   } satisfies XYCoordinate
 }
 
-function hasBoardConflict(currentSolutionMatrix: number[][], idx: number, getBoardCoordinateHandler: getSameConditionIdxFn) {
+function hasBoardConflict(currentSolutionMatrix: MatrixItem[][], idx: number, getBoardCoordinateHandler: getSameConditionIdxFn) {
   const currentXY = getXYCoordinate(idx);
   // if (idx === 0) console.log("currentXY", currentXY);
-  if (currentSolutionMatrix[currentXY.Y][currentXY.X] === 0) return false;
-  const currentValue = currentSolutionMatrix[currentXY.Y][currentXY.X];
+  if (currentSolutionMatrix[currentXY.Y][currentXY.X].Value === 0) return false;
+  const currentValue = currentSolutionMatrix[currentXY.Y][currentXY.X].Value;
   // if (idx === 0) console.log("currentValue", currentValue);
 
   for (let i = 0; i < BOARD_SIZE; i++) {
     const nextXY = getBoardCoordinateHandler(i, idx);
     // if (idx === 0) console.log("nextXY", nextXY);
-    const nextValue = currentSolutionMatrix[nextXY.Y][nextXY.X];
+    const nextValue = currentSolutionMatrix[nextXY.Y][nextXY.X].Value;
     // if (idx === 0) console.log("nextValue", nextValue);
 
     if (!(currentXY.X === nextXY.X && currentXY.Y === nextXY.Y) &&
@@ -102,30 +102,51 @@ function hasBoardConflict(currentSolutionMatrix: number[][], idx: number, getBoa
   return false;
 }
 
-export function processGame(gameState: SudokuGameState) {
+export function processGame(puzzle: number[], gameState: SudokuGameState): SudokuGameState {
+  const nextGameState = {
+    ...gameState,
+  }
+  const currentSolutionMatrix = getCurrentSolutionMatrix(puzzle, gameState.userInputs);
+
+  for (let i = 0; i < puzzle.length; i++) {
+    const xyCoordinate = getXYCoordinate(i);
+
+    let hasConflict = false;
+    // TODO can be optimized a bit more
+    if (hasBoardConflict(currentSolutionMatrix, i, getSameColIdxHandler)) hasConflict = true;
+    if (hasBoardConflict(currentSolutionMatrix, i, getSameRowIdxHandler)) hasConflict = true;
+    if (hasBoardConflict(currentSolutionMatrix, i, getSameGroupIdxHandler)) hasConflict = true;
+
+    if (hasConflict) {
+      currentSolutionMatrix[xyCoordinate.Y][xyCoordinate.X].HasError = hasConflict;
+    }
+  }
+
+  nextGameState.currentSolutionMatrix = currentSolutionMatrix;
+
+  return nextGameState;
+}
+
+//TODO: can remove puzzle by adding more infor into MatrixItem
+export function getGroups(puzzle: number[], selectingIdx: number, gameState: SudokuGameState) {
   const groups: Array<CellState[]> = [];
   for (let i = 0; i < BOARD_SIZE; i++) {
     groups.push([]);
   }
 
-  const currentSolution = getCurrentSolution(gameState.puzzle, gameState.userInputs);
-  const currentSolutionMatrix = getCurrentSolutionMatrix(gameState.puzzle, gameState.userInputs);
-
-  for (let i = 0; i < gameState.puzzle.length; i++) {
+  for (let i = 0; i < puzzle.length; i++) {
     const coordinate = getCoordinate(i);
+    const matrixItem = gameState.currentSolutionMatrix[coordinate.iRow][coordinate.iCol];
 
-    const isSelected = gameState.selectingIdx === i;
-    const coordinateSelected = getCoordinate(gameState.selectingIdx);
-    const isUserInput = gameState.puzzle[i] === 0;
+    const isSelected = selectingIdx === i;
+    const coordinateSelected = getCoordinate(selectingIdx);
+    const isUserInput = puzzle[i] === 0;
 
-    let hasConflict = false;
-    if (hasBoardConflict(currentSolutionMatrix, i, getSameColIdxHandler)) hasConflict = true;
-    if (hasBoardConflict(currentSolutionMatrix, i, getSameRowIdxHandler)) hasConflict = true;
-    if (hasBoardConflict(currentSolutionMatrix, i, getSameGroupIdxHandler)) hasConflict = true;
+    let hasConflict = matrixItem.HasError;
 
     groups[coordinate.groupIdx].push({
       idx: i,
-      num: currentSolution[i],
+      num: matrixItem.Value,
       coordinate,
       isUserInput,
       selected: isSelected,
@@ -134,8 +155,8 @@ export function processGame(gameState: SudokuGameState) {
         coordinateSelected.iRow === coordinate.iRow ||
         coordinateSelected.groupIdx === coordinate.groupIdx,
       isSameNum:
-        gameState.puzzle[gameState.selectingIdx] !== 0 &&
-        gameState.puzzle[i] === gameState.puzzle[gameState.selectingIdx],
+        puzzle[selectingIdx] !== 0 &&
+        puzzle[i] === puzzle[selectingIdx],
       hasConflict,
     });
   }
@@ -153,12 +174,16 @@ export function getCurrentSolution(puzzle: number[], userInputs: SudokuUserInput
 }
 
 // return a 2D array to navigate between items a bit easier
-function getCurrentSolutionMatrix(puzzle: number[], userInputs: SudokuUserInput[]) {
+export function getCurrentSolutionMatrix(puzzle: number[], userInputs: SudokuUserInput[]): MatrixItem[][] {
   const currentSolution = getCurrentSolution(puzzle, userInputs);
 
   let arr = [];
   for (let i = 0; i < BOARD_SIZE; i++) {
-    arr.push(currentSolution.slice(i * BOARD_SIZE, (i + 1) * BOARD_SIZE));
+    arr.push(
+      currentSolution
+        .slice(i * BOARD_SIZE, (i + 1) * BOARD_SIZE)
+        .map(item => ({ Value: item, HasError: false } satisfies MatrixItem))
+    );
   }
 
   return arr;

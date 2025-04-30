@@ -5,11 +5,10 @@ import {
   GameState as ActivityState,
   GROUP_BORDER,
   type SudokuGameState,
-  SudokuUserInput,
 } from "./constants";
 import CellGroup from "./CellGroup";
 import { GAME_DATA } from "@/data/sudoku";
-import { getCurrentSolution, processGame, validateSolution } from "./service";
+import { getCurrentSolutionMatrix, getGroups, processGame } from "./service";
 import { Button } from "../ui/button";
 import DebugScreen from "../DebugScreen";
 
@@ -17,40 +16,39 @@ function SudokuBoard() {
   const boardDimension = CELL_DIMENSION * 9;
   const borderDimension = 4 * GROUP_BORDER + 3 * 2 * CELL_BORDER;
 
-  const [userInputs, setUserInputs] = useState<SudokuUserInput[]>([]);
-  // console.log(userInputs);
-  const [selectingIdx, setSelectingIdx] = useState<number>(-1);
   const puzzleData = GAME_DATA[0].easy.puzzle_data;
+  const [gameState, setGameState] = useState<SudokuGameState>({
+    activityState: ActivityState.Started,
+    userInputs: [],
+    currentSolutionMatrix: getCurrentSolutionMatrix(puzzleData.puzzle, []),
+  });
 
-  const currentSolution = getCurrentSolution(puzzleData.puzzle, userInputs);
-  let activityState =
-    userInputs.length > 0 ? ActivityState.InProgress : ActivityState.Started;
-  if (validateSolution(currentSolution, puzzleData.solution)) {
-    activityState = ActivityState.Completed;
-  }
-  const gameState: SudokuGameState = {
-    puzzle: puzzleData.puzzle,
-    selectingIdx,
-    activityState,
-    userInputs,
-  };
+  // UI-related states
+  const [selectingIdx, setSelectingIdx] = useState<number>(-1);
 
   const handleSelect = (idx: number) => {
     setSelectingIdx(idx);
   };
 
   const handleUserInput = (userInputValue: number) => {
-    setUserInputs([
-      ...userInputs,
-      {
-        Idx: selectingIdx,
-        Value: userInputValue,
-      },
-    ]);
+    const nextGameState = processGame(puzzleData.puzzle, {
+      ...gameState,
+      userInputs: [
+        ...gameState.userInputs,
+        {
+          Idx: selectingIdx,
+          Value: userInputValue,
+        },
+      ],
+    });
+
+    setGameState(nextGameState);
   };
 
-  const groups = processGame(gameState);
-  // console.log(groups[0]);
+  // 2 stages:
+  // 1. validation, progress the game logic
+  // 2. build UI state for display purpose
+  const groups = getGroups(puzzleData.puzzle, selectingIdx, gameState);
 
   const KEY_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (

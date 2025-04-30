@@ -13,12 +13,17 @@ export enum GameState {
   Completed
 }
 
+export type MatrixItem = {
+  Value: number;
+  HasError: boolean;
+}
+
 //sudoku game state
 export type SudokuGameState = {
-  puzzle: number[];
-  selectingIdx: number;
   activityState: GameState;
   userInputs: SudokuUserInput[];
+  // TODO: can also store a dict of error/validation errors instead of a whole matrix
+  currentSolutionMatrix: MatrixItem[][];
 };
 
 export type Coordinate = {
