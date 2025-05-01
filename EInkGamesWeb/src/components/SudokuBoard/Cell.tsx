@@ -1,5 +1,5 @@
 import React from "react";
-import { CELL_BORDER, CELL_DIMENSION, Coordinate } from "./constants";
+import { CELL_BORDER, Coordinate } from "./constants";
 import clsx from "clsx";
 
 export type CellState = {
@@ -14,12 +14,13 @@ export type CellState = {
 };
 
 type CellProps = {
+  cellDimension: number;
   state: CellState;
   onSelect: (idx: number) => void;
 };
 
 function Cell(props: CellProps) {
-  const { state, onSelect } = props;
+  const { cellDimension, state, onSelect } = props;
   const displayText = state.num === 0 ? "" : state.num;
 
   let marginRight = CELL_BORDER;
@@ -64,8 +65,8 @@ function Cell(props: CellProps) {
         }
       )}
       style={{
-        width: CELL_DIMENSION,
-        height: CELL_DIMENSION,
+        width: cellDimension,
+        height: cellDimension,
         marginRight,
         marginBottom,
       }}

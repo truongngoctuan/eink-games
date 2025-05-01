@@ -1,5 +1,16 @@
 import { CellState } from "./Cell";
-import { Coordinate, MatrixItem, SudokuGameState, SudokuUserInput, XYCoordinate } from "./constants";
+import { CELL_BORDER, CELL_DIMENSION, Coordinate, GROUP_BORDER, MatrixItem, SudokuGameState, SudokuUserInput, XYCoordinate } from "./constants";
+
+export function getBoardDimension(cellSize: number) {
+  return cellSize * 9 + 4 * GROUP_BORDER + 6 * CELL_BORDER;
+}
+
+export function getMaxCellDimension(windowWidth: number) {
+  return Math.min(
+    Math.floor((windowWidth - (4 * GROUP_BORDER + 6 * CELL_BORDER)) / 9),
+    CELL_DIMENSION
+  );
+}
 
 const BOARD_SIZE = 9;
 const GROUP_SIZE = 3;

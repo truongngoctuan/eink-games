@@ -1,19 +1,27 @@
 import React, { useState } from "react";
 import {
   CELL_BORDER,
-  CELL_DIMENSION,
   GameState as ActivityState,
   GROUP_BORDER,
   type SudokuGameState,
 } from "./constants";
 import CellGroup from "./CellGroup";
 import { GAME_DATA } from "@/data/sudoku";
-import { getCurrentSolutionMatrix, getGroups, processGame } from "./service";
+import {
+  getCurrentSolutionMatrix,
+  getGroups,
+  getMaxCellDimension,
+  processGame,
+} from "./service";
 import { Button } from "../ui/button";
-import DebugScreen from "../DebugScreen";
+// import DebugScreen from "../DebugScreen";
+import useWindowSize from "react-use/lib/useWindowSize";
 
 function SudokuBoard() {
-  const boardDimension = CELL_DIMENSION * 9;
+  const { width } = useWindowSize();
+  const cellDimension = getMaxCellDimension(width);
+
+  const boardDimension = cellDimension * 9;
   const borderDimension = 4 * GROUP_BORDER + 3 * 2 * CELL_BORDER;
 
   const puzzleData = GAME_DATA[0].easy.puzzle_data;
@@ -53,7 +61,7 @@ function SudokuBoard() {
   const KEY_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   return (
     <div className="flex flex-col items-center md:flex-row md:items-start md:justify-center">
-      <DebugScreen data="asdf" />
+      {/* <DebugScreen data="asdf" /> */}
       <div className="w-full md:w-fit flex justify-center md:justify-end">
         <div
           className="bg-black flex flex-wrap p-1"
@@ -64,6 +72,7 @@ function SudokuBoard() {
         >
           {groups.map((group, groupIdx) => (
             <CellGroup
+              cellDimension={cellDimension}
               key={groupIdx}
               cells={group}
               state={group[0].coordinate}
