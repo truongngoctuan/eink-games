@@ -1,7 +1,11 @@
-import SudokuBoard from "@/components/SudokuBoard";
 import { getImagePath } from "@/components/utils";
 import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
+
+import dynamic from "next/dynamic";
+const SudokuBoard = dynamic(() => import("@/components/SudokuBoard"), {
+  ssr: false,
+});
 
 type SudokuWithLevelDifficultyPageProps = {
   difficulty: string;

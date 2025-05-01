@@ -6,8 +6,9 @@ export function getBoardDimension(cellSize: number) {
 }
 
 export function getMaxCellDimension(windowWidth: number) {
+  if (windowWidth === Infinity) return 0;
   return Math.min(
-    Math.floor((windowWidth - (4 * GROUP_BORDER + 6 * CELL_BORDER)) / 9),
+    Math.floor((windowWidth - (4 * GROUP_BORDER + 6 * CELL_BORDER)) / 9 - 1),
     CELL_DIMENSION
   );
 }
