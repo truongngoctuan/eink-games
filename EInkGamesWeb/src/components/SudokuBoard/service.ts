@@ -1,5 +1,5 @@
 import { CellState } from "./Cell";
-import { CELL_BORDER, CELL_DIMENSION, Coordinate, GROUP_BORDER, MatrixItem, SudokuGameState, SudokuUserInput, XYCoordinate } from "./constants";
+import { ActivityState, CELL_BORDER, CELL_DIMENSION, Coordinate, GROUP_BORDER, MatrixItem, SudokuGameState, SudokuUserInput, XYCoordinate } from "./constants";
 
 export function getBoardDimension(cellSize: number) {
   return cellSize * 9 + 4 * GROUP_BORDER + 6 * CELL_BORDER;
@@ -112,11 +112,10 @@ function hasBoardConflict(currentSolutionMatrix: MatrixItem[][], idx: number, ge
   return false;
 }
 
-export function processGame(puzzle: number[], gameState: SudokuGameState): SudokuGameState {
-  const nextGameState = {
-    ...gameState,
-  }
-  const currentSolutionMatrix = getCurrentSolutionMatrix(puzzle, gameState.userInputs);
+export function processGame(puzzle: number[], userInputs: SudokuUserInput[]): SudokuGameState {
+
+  const currentSolution = getCurrentSolution(puzzle, userInputs);
+  const currentSolutionMatrix = toMatrix(currentSolution);
 
   for (let i = 0; i < puzzle.length; i++) {
     const xyCoordinate = getXYCoordinate(i);
@@ -132,7 +131,12 @@ export function processGame(puzzle: number[], gameState: SudokuGameState): Sudok
     }
   }
 
-  nextGameState.currentSolutionMatrix = currentSolutionMatrix;
+  const nextGameState: SudokuGameState = {
+    activityState: userInputs.length === 0 ? ActivityState.Started : ActivityState.InProgress,
+    userInputs: userInputs,
+    currentSolutionMatrix: currentSolutionMatrix,
+    Restrictions: reachMaximumCounters(currentSolution),
+  }
 
   return nextGameState;
 }
@@ -184,9 +188,7 @@ export function getCurrentSolution(puzzle: number[], userInputs: SudokuUserInput
 }
 
 // return a 2D array to navigate between items a bit easier
-export function getCurrentSolutionMatrix(puzzle: number[], userInputs: SudokuUserInput[]): MatrixItem[][] {
-  const currentSolution = getCurrentSolution(puzzle, userInputs);
-
+export function toMatrix(currentSolution: number[]): MatrixItem[][] {
   const arr = [];
   for (let i = 0; i < BOARD_SIZE; i++) {
     arr.push(
@@ -204,4 +206,14 @@ export function validateSolution(currentSolution: number[], solution: number[]) 
     if (currentSolution[idx] !== item) return false;
   });
   return true;
+}
+
+function reachMaximumCounters(currentSolution: number[]): number[] {
+  const restrictions = [];
+  for (let i = 1; i <= 9; i++) {
+    if (currentSolution.filter(item => item === i).length >= 9) {
+      restrictions.push(i);
+    }
+  }
+  return restrictions;
 }

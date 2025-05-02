@@ -7,7 +7,7 @@ export const CELL_BORDER = 1;
 export const DIFFICULTY_LEVELS = ["easy", "medium", "hard"];
 
 //generic game board
-export enum GameState {
+export enum ActivityState {
   Started = 0,
   InProgress,
   Completed
@@ -20,10 +20,11 @@ export type MatrixItem = {
 
 //sudoku game state
 export type SudokuGameState = {
-  activityState: GameState;
+  activityState: ActivityState;
   userInputs: SudokuUserInput[];
   // TODO: can also store a dict of error/validation errors instead of a whole matrix
   currentSolutionMatrix: MatrixItem[][];
+  Restrictions: number[];
 };
 
 export type Coordinate = {
