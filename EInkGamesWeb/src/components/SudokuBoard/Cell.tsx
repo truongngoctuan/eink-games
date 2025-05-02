@@ -1,6 +1,7 @@
 import React from "react";
 import { CELL_BORDER, Coordinate } from "./constants";
 import clsx from "clsx";
+import { browserName } from "react-device-detect";
 
 export type CellState = {
   idx: number;
@@ -19,8 +20,8 @@ type CellProps = {
   onSelect: (idx: number) => void;
 };
 
-function Cell(props: CellProps) {
-  const { cellDimension, state, onSelect } = props;
+function Cell(props: CellProps & { className?: string }) {
+  const { className, cellDimension, state, onSelect } = props;
   const displayText = state.num === 0 ? "" : state.num;
 
   let marginRight = CELL_BORDER;
@@ -38,31 +39,13 @@ function Cell(props: CellProps) {
       className={clsx(
         "flex flex-col justify-center items-center cell relative",
         {
-          "bg-gray-200":
-            !state.isUserInput &&
-            !state.selected &&
-            !state.isHightlighted &&
-            !state.isSameNum,
-        },
-        {
-          underline: !state.isUserInput,
-        },
-        {
           "bg-white":
             state.isUserInput &&
             !state.selected &&
             !state.isHightlighted &&
             !state.isSameNum,
         },
-        {
-          "bg-amber-600": state.selected,
-        },
-        {
-          "bg-amber-300": state.isHightlighted,
-        },
-        {
-          "bg-amber-400": state.isSameNum,
-        }
+        className
       )}
       style={{
         width: cellDimension,
@@ -87,4 +70,60 @@ function Cell(props: CellProps) {
   );
 }
 
-export default Cell;
+function MultiBrowsersCell(props: CellProps) {
+  const { state } = props;
+  if (browserName === "Kindle") {
+    return (
+      <Cell
+        {...props}
+        className={clsx(
+          {
+            "bg-white":
+              !state.isUserInput &&
+              !state.selected &&
+              !state.isHightlighted &&
+              !state.isSameNum,
+          },
+          {
+            underline: !state.isUserInput,
+          },
+          {
+            "bg-gray-600": state.selected,
+          },
+          {
+            "bg-gray-300": state.isHightlighted,
+          },
+          {
+            "bg-gray-300": state.isSameNum,
+          }
+        )}
+      />
+    );
+  }
+
+  return (
+    <Cell
+      {...props}
+      className={clsx(
+        {
+          "bg-gray-200":
+            !state.isUserInput &&
+            !state.selected &&
+            !state.isHightlighted &&
+            !state.isSameNum,
+        },
+        {
+          "bg-amber-600": state.selected,
+        },
+        {
+          "bg-amber-300": state.isHightlighted,
+        },
+        {
+          "bg-amber-400": state.isSameNum,
+        }
+      )}
+    />
+  );
+}
+
+export default MultiBrowsersCell;
