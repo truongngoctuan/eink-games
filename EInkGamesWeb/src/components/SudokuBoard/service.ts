@@ -217,3 +217,16 @@ function reachMaximumCounters(currentSolution: number[]): number[] {
   }
   return restrictions;
 }
+
+export function getActivityStateString(activityState: ActivityState) {
+  switch (activityState) {
+    case ActivityState.Started:
+      return "Started";
+    case ActivityState.InProgress:
+      return "In progress";
+    case ActivityState.Completed:
+      return "Completed";
+    default:
+      return "--"
+  }
+}

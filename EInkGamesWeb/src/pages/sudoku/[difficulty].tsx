@@ -1,8 +1,8 @@
-import { getImagePath } from "@/components/utils";
+import Loading from "@/components/Loading";
 import { GetStaticPaths, GetStaticProps } from "next";
-import Image from "next/image";
 
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 const SudokuBoard = dynamic(() => import("@/components/SudokuBoard"), {
   ssr: false,
 });
@@ -42,19 +42,8 @@ export default function SudokuWithLevelDifficultyPage({
   difficulty,
 }: SudokuWithLevelDifficultyPageProps) {
   return (
-    <>
-      <div className="bg-gray-200 my-2 p-2 flex">
-        <Image
-          className="mr-2"
-          width={28}
-          height={28}
-          src={getImagePath("/game-icons/sudoku.svg")}
-          alt="Sudoku icon"
-        />
-        <b>Sudoku Game </b> - <i>{difficulty}</i> - Game Time: 00:00:00 -
-        Started
-      </div>
-      <SudokuBoard />
-    </>
+    <Suspense fallback={<Loading />}>
+      <SudokuBoard difficulty={difficulty} />
+    </Suspense>
   );
 }

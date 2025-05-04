@@ -5,6 +5,7 @@ export const CELL_BORDER = 1;
 
 // game level selection
 export const DIFFICULTY_LEVELS = ["easy", "medium", "hard"];
+export const KEY_VALUES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 //generic game board
 export enum ActivityState {

@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d out --nojekyll"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^2.1.12",
     "@radix-ui/react-slot": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -21,7 +22,7 @@
     "react-device-detect": "^2.2.3",
     "react-dom": "^18",
     "react-use": "^17.6.0",
-    "tailwind-merge": "^3.2.0",
+    "tailwind-merge": "2.6.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {

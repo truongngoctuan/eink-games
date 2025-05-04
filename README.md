@@ -16,6 +16,34 @@ There is one particular version of NextJs works with Kindle browser: `14.2.28`, 
 "@swc/helpers": "0.5.5",
 ```
 
+The complier: Webpack + SWC.
+
+If there is an "unepxected token" error, it is likely due to the fact that the Kindle browser does not support some modern JavaScript features. You can try to use the `transpilePackages` option in your NextJs config file to transpile specific packages that are causing issues.
+
+Transpiler dependency in webpack + swc process of building modules for libraries like `"tailwind-merge"` and `radix-ui`:
+
+```json
+// get the list of radix-ui packages from npm
+  transpilePackages: [
+    "@radix-ui/react-dropdown-menu",
+    "@radix-ui/primitive",
+    "@radix-ui/react-context",
+    "@radix-ui/react-use-controllable-state",
+    "@radix-ui/react-use-layout-effect",
+    "@radix-ui/react-use-effect-event",
+    "@radix-ui/react-slot",
+    "@radix-ui/react-menu",
+    "@radix-ui/react-collection",
+    "@radix-ui/react-dismissable-layer",
+    "@radix-ui/react-use-callback-ref",
+    "@radix-ui/react-use-escape-keydown",
+    "@radix-ui/react-focus-guards",
+    "@radix-ui/react-focus-scope",
+    "@radix-ui/react-id",
+    ...
+  ],
+```
+
 ### Vite
 
 Vite is a build tool that aims to provide a faster and leaner development experience for modern web projects. The Kindle browser has limited support for modern JavaScript features, so not all versions of Vite will work.
